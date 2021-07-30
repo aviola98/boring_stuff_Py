@@ -141,3 +141,80 @@ ends_with_number.search('Your number is forty two.') == None
 wholeStringIsNum = re.compile(r'^\d+$')
 wholeStringIsNum.search('1234567890')
 
+#the . character in a regular expression is called a wildcard and will match any character except for a new line
+
+atRegex = re.compile(r'.at')
+atRegex.findall('The cat in the hat sat on the flat mat.')
+#to match an actual dot escape the dot with \ like \.
+
+#Matching Everything with Dot-Star
+
+matchname = re.compile(r'First name: (.*) Last Name: (.*)')
+mo = matchname.search(r'First name: Andre Last Name: Viola')
+mo.group(1)
+mo.group(2)
+
+#To match any and all text in a nongreedy fashion, use the dot, star,
+#and question mark (.*?). 
+
+nongreedy= re.compile(r'<.*?>')
+mo = nongreedy.search('<To serve man> for dinner.>')
+mo.group()
+
+greedy = re.compile(r'<.*>')
+mo = greedy.search('<To serve man> for dinner.>')
+mo.group()
+
+#y passing re.DOTALL as
+#the second argument to re.compile(), you can make the dot character match
+#all characters, including the newline character
+
+no_new_line = re.compile('.*')
+
+no_new_line.search('Serve the public trust.\nProtect the innocent.\nUphold the law.').group()
+
+
+new_line = re.compile('.*', re.DOTALL)
+new_line.search('Serve the public trust.\nProtect the innocent.\nUphold the law.').group()
+
+
+#using re.IGNORECASE or re.I to match letters no matter the case
+
+robocop = re.compile(r'robocop', re.I)
+robocop.search('RoboCop is part man, part machine, all cop.').group()
+robocop.search('Al, why does your programming book talk about robocop so much?').group()
+
+#Substituting Strings with the sub() Method
+#The first argument is a string to replace any matches.
+#The second is the string for the regular expression.
+
+names = re.compile(r'Agent \w+')
+names.sub('CENSORED', 'Agent Alice gave the secret documents to Agent Bob.')
+
+
+#censoring the names of the secret agents by
+#showing just the first letters of their names.
+
+
+
+agentNamesRegex = re.compile(r'Agent (\w)\w*')
+agentNamesRegex.sub(r'\1****', 'Agent Alice told Agent Carol that Agent Eve knew Agent Bob was a double agent.')
+
+#verbose mode
+
+phoneRegex = re.compile(r'''(
+(\d{3}|\d{3}))? #areacode
+(\s|-|\.)? #separator
+\d{3} #first 3 digits
+(\s|-|\.)  #separator
+\d{4} #last 4 digits
+(\s*(ext|x|ext.)\s*\d{2,5})? #extension
+)''', re.VERBOSE)
+                        
+#uses the triple-quote syntax (''') to
+#create a multiline string so that you can spread the regular 
+#expression definition over many lines, making it much more legible
+
+#bitwise or operator |
+
+some_regex_value = re.compile('foo',re.I|re.DOTALL|re.VERBOSE)
